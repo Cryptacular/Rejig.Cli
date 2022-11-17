@@ -33,42 +33,73 @@ export default class Process extends Command {
   async run(): Promise<void> {
     const { args, flags } = await this.parse(Process);
 
-    this.log(`Processing ${args.workflow}...`);
+    const isDirectory = fs.lstatSync(args.workflow).isDirectory();
 
-    const workflow = yaml.load(
-      fs.readFileSync(path.resolve(args.workflow), "utf-8")
-    ) as Workflow;
+    if (isDirectory) {
+      const filesInDir = fs
+        .readdirSync(args.workflow)
+        .filter(
+          (f) =>
+            f.toLocaleLowerCase().endsWith(".yml") ||
+            f.toLocaleLowerCase().endsWith(".yaml")
+        );
+
+      await Promise.all(
+        filesInDir.map((file) =>
+          this.process(path.resolve(args.workflow, file), flags.out)
+        )
+      );
+    } else {
+      await this.process(args.workflow, flags.out);
+    }
+  }
+
+  async process(workflowPath: string, outDir?: string): Promise<void> {
+    const workflowFilename = path.basename(workflowPath);
 
     try {
-      const image = await processWorkflow(getDefaultWorkflow(workflow), Jimp);
-      const base64Matches = image.match(/^data:([+/A-Za-z-]+);base64,(.+)$/);
+      this.log(`Processing '${workflowFilename}'...`);
 
-      if (!base64Matches) {
-        this.error("Something went wrong :(");
-      }
+      const workflow = yaml.load(
+        fs.readFileSync(path.resolve(workflowPath), "utf-8")
+      ) as Workflow;
 
-      const buffer = Buffer.from(base64Matches[2], "base64");
-      const outputFolder = flags.out
-        ? path.resolve(flags.out)
-        : path.dirname(args.workflow);
+      const outputFolder = outDir
+        ? path.resolve(outDir)
+        : path.dirname(workflowPath);
       const outputFilename =
         workflow.name ??
-        path.basename((args.workflow as string).replace(/.ya?ml$/i, "")) ??
+        path.basename(workflowPath.replace(/.ya?ml$/i, "")) ??
         "image";
       const outputPath = `${outputFolder}/${outputFilename}.png`;
 
-      if (!fs.existsSync(outputFolder)) {
-        fs.mkdirSync(outputFolder);
-      }
-
-      fs.writeFileSync(path.resolve(outputPath), buffer);
+      const image = await processWorkflow(getDefaultWorkflow(workflow), Jimp);
+      this.writeFile(image, outputPath);
 
       console.log(
-        `Successfully processed workflow and saved to:\n${outputPath}`
+        `Successfully processed workflow '${workflowFilename}' and saved to:\n  > ${path.relative(
+          "",
+          outputPath
+        )}`
       );
     } catch (error) {
-      console.log("Couldn't process workflow :(");
+      console.log(`Couldn't process workflow '${workflowFilename}' :(`);
       this.error(JSON.stringify(error, null, 2));
     }
+  }
+
+  writeFile(image: string, outputPath: string): void {
+    const outputFolder = path.dirname(outputPath);
+    if (!fs.existsSync(outputFolder)) {
+      fs.mkdirSync(outputFolder);
+    }
+
+    const base64Matches = image.match(/^data:([+/A-Za-z-]+);base64,(.+)$/);
+    if (!base64Matches) {
+      this.error("Something went wrong :(");
+    }
+
+    const buffer = Buffer.from(base64Matches[2], "base64");
+    fs.writeFileSync(path.resolve(outputPath), buffer);
   }
 }
