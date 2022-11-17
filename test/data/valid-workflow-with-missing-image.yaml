@@ -1,0 +1,14 @@
+name: Valid workflow with missing image
+
+size:
+  width: 400
+  height: 300
+
+layers:
+  - content:
+      type: image
+      location: >-
+        ./test/data/assets/image-that-doesnt-exist.jpg
+    position:
+      x: -20
+      y: 20
