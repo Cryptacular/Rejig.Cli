@@ -2,15 +2,21 @@
 
 Command Line Interface for Rejig to process image editing workflows.
 
+See [Rejig.Processing](https://github.com/Cryptacular/Rejig.Processing) for more details on the workflow schema.
+
+**Table of Contents**
+
 <!-- toc -->
-* [Rejig CLI](#rejig-cli)
-* [Usage](#usage)
-* [Commands](#commands)
+
+- [Rejig CLI](#rejig-cli)
+- [Usage](#usage)
+- [Commands](#commands)
 <!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
+
 ```sh-session
 $ npm install -g rejig-cli
 $ rejig COMMAND
@@ -22,22 +28,24 @@ USAGE
   $ rejig COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-* [`rejig help [COMMAND]`](#rejig-help-command)
-* [`rejig plugins`](#rejig-plugins)
-* [`rejig plugins:install PLUGIN...`](#rejig-pluginsinstall-plugin)
-* [`rejig plugins:inspect PLUGIN...`](#rejig-pluginsinspect-plugin)
-* [`rejig plugins:install PLUGIN...`](#rejig-pluginsinstall-plugin-1)
-* [`rejig plugins:link PLUGIN`](#rejig-pluginslink-plugin)
-* [`rejig plugins:uninstall PLUGIN...`](#rejig-pluginsuninstall-plugin)
-* [`rejig plugins:uninstall PLUGIN...`](#rejig-pluginsuninstall-plugin-1)
-* [`rejig plugins:uninstall PLUGIN...`](#rejig-pluginsuninstall-plugin-2)
-* [`rejig plugins update`](#rejig-plugins-update)
-* [`rejig process WORKFLOW`](#rejig-process-workflow)
+
+- [`rejig help [COMMAND]`](#rejig-help-command)
+- [`rejig plugins`](#rejig-plugins)
+- [`rejig plugins:install PLUGIN...`](#rejig-pluginsinstall-plugin)
+- [`rejig plugins:inspect PLUGIN...`](#rejig-pluginsinspect-plugin)
+- [`rejig plugins:install PLUGIN...`](#rejig-pluginsinstall-plugin-1)
+- [`rejig plugins:link PLUGIN`](#rejig-pluginslink-plugin)
+- [`rejig plugins:uninstall PLUGIN...`](#rejig-pluginsuninstall-plugin)
+- [`rejig plugins:uninstall PLUGIN...`](#rejig-pluginsuninstall-plugin-1)
+- [`rejig plugins:uninstall PLUGIN...`](#rejig-pluginsuninstall-plugin-2)
+- [`rejig plugins update`](#rejig-plugins-update)
+- [`rejig process WORKFLOW`](#rejig-process-workflow)
 
 ## `rejig help [COMMAND]`
 
@@ -110,7 +118,7 @@ ALIASES
   $ rejig plugins add
 
 EXAMPLES
-  $ rejig plugins:install myplugin 
+  $ rejig plugins:install myplugin
 
   $ rejig plugins:install https://github.com/someuser/someplugin
 
@@ -170,7 +178,7 @@ ALIASES
   $ rejig plugins add
 
 EXAMPLES
-  $ rejig plugins:install myplugin 
+  $ rejig plugins:install myplugin
 
   $ rejig plugins:install https://github.com/someuser/someplugin
 
@@ -311,4 +319,5 @@ EXAMPLES
 ```
 
 _See code: [dist/commands/process/index.ts](https://github.com/Cryptacular/rejig-cli/blob/v0.0.0/dist/commands/process/index.ts)_
+
 <!-- commandsstop -->
