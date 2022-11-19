@@ -17,13 +17,13 @@
     "/oclif.manifest.json"
   ],
   "dependencies": {
-    "@Cryptacular/rejig.processing": "^1.5.1",
     "@oclif/core": "^1.19.1",
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.1.6",
     "@types/js-yaml": "^4.0.5",
     "jimp": "^0.16.2",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "rejig-processing": "^1.5.1"
   },
   "devDependencies": {
     "@oclif/test": "^2.2.8",

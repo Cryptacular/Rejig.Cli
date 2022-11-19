@@ -1,5 +1,5 @@
 import { Command, Flags } from "@oclif/core";
-import { processWorkflow } from "@Cryptacular/rejig.processing";
+import { processWorkflow } from "rejig-processing";
 import * as Jimp from "jimp";
 import * as yaml from "js-yaml";
 import fs from "node:fs";
@@ -7,7 +7,7 @@ import path from "node:path";
 import {
   Workflow,
   getDefaultWorkflow,
-} from "@Cryptacular/rejig.processing/lib/models/Workflow";
+} from "rejig-processing/lib/models/Workflow";
 
 export default class Process extends Command {
   static description = "Process a workflow in YAML format";
