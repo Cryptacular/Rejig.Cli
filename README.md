@@ -20,7 +20,7 @@ $ npm install -g rejig-cli
 $ rejig COMMAND
 running command...
 $ rejig (--version)
-rejig-cli/0.1.1 darwin-x64 node-v16.6.2
+rejig-cli/0.1.2 darwin-x64 node-v16.6.2
 $ rejig --help [COMMAND]
 USAGE
   $ rejig COMMAND
@@ -41,7 +41,6 @@ USAGE
 * [`rejig plugins:uninstall PLUGIN...`](#rejig-pluginsuninstall-plugin-1)
 * [`rejig plugins:uninstall PLUGIN...`](#rejig-pluginsuninstall-plugin-2)
 * [`rejig plugins update`](#rejig-plugins-update)
-* [`rejig process WORKFLOW`](#rejig-process-workflow)
 
 ## `rejig help [COMMAND]`
 
@@ -292,27 +291,4 @@ FLAGS
 DESCRIPTION
   Update installed plugins.
 ```
-
-## `rejig process WORKFLOW`
-
-Process a workflow in YAML format
-
-```
-USAGE
-  $ rejig process [WORKFLOW] [-o <value>]
-
-ARGUMENTS
-  WORKFLOW  Workflow or folder of workflows to process
-
-FLAGS
-  -o, --out=<value>  Specify folder to write images to. Defaults to the folder the workflow is in.
-
-DESCRIPTION
-  Process a workflow in YAML format
-
-EXAMPLES
-  $ rejig process workflow.yaml
-```
-
-_See code: [dist/commands/process/index.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.1.1/dist/commands/process/index.ts)_
 <!-- commandsstop -->
