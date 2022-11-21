@@ -20,7 +20,7 @@ $ npm install -g rejig-cli
 $ rejig COMMAND
 running command...
 $ rejig (--version)
-rejig-cli/0.2.0 darwin-x64 node-v16.6.2
+rejig-cli/0.3.0 darwin-x64 node-v16.6.2
 $ rejig --help [COMMAND]
 USAGE
   $ rejig COMMAND
@@ -299,13 +299,14 @@ Process one or more workflows in YAML or JSON format, then output an image.
 
 ```
 USAGE
-  $ rejig process [WORKFLOW] [-o <value>]
+  $ rejig process [WORKFLOW] [-w] [-o <value>]
 
 ARGUMENTS
   WORKFLOW  Workflow or folder of workflows to process
 
 FLAGS
   -o, --out=<value>  Specify folder to write images to. Defaults to the folder the workflow is in.
+  -w, --watch        Watch workflow files for changes and re-process them when they do.
 
 DESCRIPTION
   Process one or more workflows in YAML or JSON format, then output an image.
@@ -314,5 +315,5 @@ EXAMPLES
   $ rejig process workflow.yaml
 ```
 
-_See code: [dist/commands/process/index.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.2.0/dist/commands/process/index.ts)_
+_See code: [dist/commands/process/index.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.3.0/dist/commands/process/index.ts)_
 <!-- commandsstop -->
