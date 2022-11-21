@@ -3,6 +3,7 @@ import { processWorkflow } from "rejig-processing";
 import * as Jimp from "jimp";
 import * as yaml from "js-yaml";
 import fs from "node:fs";
+import { watch } from "node:fs/promises";
 import path from "node:path";
 import {
   Workflow,
@@ -16,6 +17,12 @@ export default class Process extends Command {
   static examples = [`$ rejig process workflow.yaml`];
 
   static flags = {
+    watch: Flags.boolean({
+      char: "w",
+      description:
+        "Watch workflow files for changes and re-process them when they do.",
+      default: false,
+    }),
     out: Flags.string({
       char: "o",
       description:
@@ -57,8 +64,41 @@ export default class Process extends Command {
           this.process(path.resolve(args.workflow, file), flags.out)
         )
       );
+
+      if (flags.watch) {
+        await Promise.all(
+          filesInDir.map((file) =>
+            this.watch(path.resolve(args.workflow, file), flags.out)
+          )
+        );
+      }
     } else {
       await this.process(args.workflow, flags.out);
+
+      if (flags.watch) {
+        this.watch(args.workflow, flags.out);
+      }
+    }
+  }
+
+  async watch(file: string, outDir?: string): Promise<void> {
+    this.log(`Watching for changes to '${path.basename(file)}'...`);
+
+    try {
+      const watcher = watch(file);
+
+      for await (const event of watcher) {
+        if (event.eventType === "change") {
+          await this.process(file, outDir);
+        }
+      }
+    } catch (error) {
+      this.log(
+        `✗ Something went wrong watching for changes to '${path.basename(
+          file
+        )}' :(`
+      );
+      this.error(JSON.stringify(error, null, 2));
     }
   }
 
