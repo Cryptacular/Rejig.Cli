@@ -20,9 +20,39 @@ describe("process", () => {
       "test/data/valid/valid-workflow.yaml",
       "--out=test/data/output",
     ])
-    .it("runs command with valid workflow", (ctx) => {
+    .it("runs command with valid workflow with YAML extension", (ctx) => {
       expect(ctx.stdout).to.contain("Successfully processed workflow");
-      expect(ctx.stdout).to.contain("test/data/output/Valid workflow.png");
+      expect(ctx.stdout).to.contain(
+        "test/data/output/Valid workflow - YAML.png"
+      );
+    });
+
+  test
+    .stdout()
+    .command([
+      "process",
+      "test/data/valid/valid-workflow.yml",
+      "--out=test/data/output",
+    ])
+    .it("runs command with valid workflow with YML extension", (ctx) => {
+      expect(ctx.stdout).to.contain("Successfully processed workflow");
+      expect(ctx.stdout).to.contain(
+        "test/data/output/Valid workflow - YML.png"
+      );
+    });
+
+  test
+    .stdout()
+    .command([
+      "process",
+      "test/data/valid/valid-workflow.json",
+      "--out=test/data/output",
+    ])
+    .it("runs command with valid workflow with JSON extension", (ctx) => {
+      expect(ctx.stdout).to.contain("Successfully processed workflow");
+      expect(ctx.stdout).to.contain(
+        "test/data/output/Valid workflow - JSON.png"
+      );
     });
 
   test
@@ -43,7 +73,15 @@ describe("process", () => {
     .stdout()
     .command(["process", "test/data/valid", "--out=test/data/output"])
     .it("runs command with folder of valid workflows", (ctx) => {
-      expect(ctx.stdout).to.contain("test/data/output/Valid workflow.png");
+      expect(ctx.stdout).to.contain(
+        "test/data/output/Valid workflow - YAML.png"
+      );
+      expect(ctx.stdout).to.contain(
+        "test/data/output/Valid workflow - YML.png"
+      );
+      expect(ctx.stdout).to.contain(
+        "test/data/output/Valid workflow - JSON.png"
+      );
       expect(ctx.stdout).to.contain(
         "test/data/output/valid-workflow-no-name.png"
       );

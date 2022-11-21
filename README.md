@@ -295,7 +295,7 @@ DESCRIPTION
 
 ## `rejig process WORKFLOW`
 
-Process a workflow in YAML format
+Process one or more workflows in YAML or JSON format, then output an image.
 
 ```
 USAGE
@@ -308,7 +308,7 @@ FLAGS
   -o, --out=<value>  Specify folder to write images to. Defaults to the folder the workflow is in.
 
 DESCRIPTION
-  Process a workflow in YAML format
+  Process one or more workflows in YAML or JSON format, then output an image.
 
 EXAMPLES
   $ rejig process workflow.yaml

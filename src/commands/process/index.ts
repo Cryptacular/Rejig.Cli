@@ -10,7 +10,8 @@ import {
 } from "rejig-processing/lib/models/Workflow";
 
 export default class Process extends Command {
-  static description = "Process a workflow in YAML format";
+  static description =
+    "Process one or more workflows in YAML or JSON format, then output an image.";
 
   static examples = [`$ rejig process workflow.yaml`];
 
@@ -36,13 +37,20 @@ export default class Process extends Command {
     const isDirectory = fs.lstatSync(args.workflow).isDirectory();
 
     if (isDirectory) {
-      const filesInDir = fs
-        .readdirSync(args.workflow)
-        .filter(
-          (f) =>
-            f.toLocaleLowerCase().endsWith(".yml") ||
-            f.toLocaleLowerCase().endsWith(".yaml")
+      const filesInDir = fs.readdirSync(args.workflow).filter((f) => {
+        const lowercaseFile = f.toLocaleLowerCase();
+        return (
+          lowercaseFile.endsWith(".yml") ||
+          lowercaseFile.endsWith(".yaml") ||
+          lowercaseFile.endsWith(".json")
         );
+      });
+
+      this.log(
+        `Attempting to process the following files:\n${filesInDir
+          .map((f) => "  · " + path.basename(f))
+          .join("\n")}`
+      );
 
       await Promise.all(
         filesInDir.map((file) =>
@@ -58,11 +66,13 @@ export default class Process extends Command {
     const workflowFilename = path.basename(workflowPath);
 
     try {
-      this.log(`Processing '${workflowFilename}'...`);
+      const workflow = this.loadFile(workflowPath);
 
-      const workflow = yaml.load(
-        fs.readFileSync(path.resolve(workflowPath), "utf-8")
-      ) as Workflow;
+      if (!workflow) {
+        return;
+      }
+
+      this.log(`Processing '${workflowFilename}'...`);
 
       const outputFolder = outDir
         ? path.resolve(outDir)
@@ -76,15 +86,32 @@ export default class Process extends Command {
       const image = await processWorkflow(getDefaultWorkflow(workflow), Jimp);
       this.writeFile(image, outputPath);
 
-      console.log(
-        `Successfully processed workflow '${workflowFilename}' and saved to:\n  > ${path.relative(
+      this.log(
+        `Successfully processed workflow '${workflowFilename}' and saved to:\n  ✓ ${path.relative(
           "",
           outputPath
         )}`
       );
     } catch (error) {
-      console.log(`Couldn't process workflow '${workflowFilename}' :(`);
+      this.log(`✗ Couldn't process workflow '${workflowFilename}' :(`);
       this.error(JSON.stringify(error, null, 2));
+    }
+  }
+
+  loadFile(workflowPath: string): Workflow | void {
+    const lowercaseFile = workflowPath.toLocaleLowerCase();
+
+    if (lowercaseFile.endsWith(".yml") || lowercaseFile.endsWith(".yaml")) {
+      return yaml.load(
+        fs.readFileSync(path.resolve(workflowPath), "utf-8")
+      ) as Workflow;
+    }
+
+    if (lowercaseFile.endsWith(".json")) {
+      return JSON.parse(
+        // eslint-disable-next-line unicorn/prefer-json-parse-buffer
+        fs.readFileSync(path.resolve(workflowPath), "utf-8")
+      ) as Workflow;
     }
   }
 
@@ -96,7 +123,7 @@ export default class Process extends Command {
 
     const base64Matches = image.match(/^data:([+/A-Za-z-]+);base64,(.+)$/);
     if (!base64Matches) {
-      this.error("Something went wrong :(");
+      this.error("✗ Not a valid Base64 image from Rejig.Processing");
     }
 
     const buffer = Buffer.from(base64Matches[2], "base64");

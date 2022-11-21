@@ -1,0 +1,97 @@
+{
+  "name": "Valid workflow - JSON",
+  "size": {
+    "width": 400,
+    "height": 300
+  },
+  "layers": [
+    {
+      "name": "Overlay",
+      "id": "overlay",
+      "content": {
+        "type": "solid",
+        "color": {
+          "r": 48,
+          "g": 20,
+          "b": 185,
+          "a": 1
+        }
+      },
+      "opacity": 15
+    },
+    {
+      "name": "Avatar",
+      "id": "avatar",
+      "content": {
+        "type": "image",
+        "location": "./test/data/assets/avatar.jpg"
+      },
+      "position": {
+        "x": -20,
+        "y": 20
+      },
+      "origin": {
+        "descriptor": "top right"
+      },
+      "alignment": {
+        "descriptor": "top right"
+      }
+    },
+    {
+      "name": "Logo",
+      "id": "logo",
+      "content": {
+        "type": "image",
+        "location": "./test/data/assets/the-crypt-logo.png"
+      },
+      "position": {
+        "y": -20
+      },
+      "origin": {
+        "descriptor": "bottom center"
+      },
+      "alignment": {
+        "descriptor": "bottom center"
+      },
+      "scale": {
+        "x": 0.4,
+        "y": 0.4
+      },
+      "opacity": 80
+    },
+    {
+      "name": "Background",
+      "content": {
+        "type": "image",
+        "location": "./test/data/assets/background.jpg"
+      },
+      "origin": {
+        "descriptor": "center center"
+      },
+      "alignment": {
+        "descriptor": "center center"
+      },
+      "scale": {
+        "x": 0.09,
+        "y": 0.09
+      }
+    }
+  ],
+  "parameters": [
+    {
+      "name": "avatar",
+      "targetLayer": "avatar",
+      "targetProperty": "content.location"
+    },
+    {
+      "name": "logo",
+      "targetLayer": "logo",
+      "targetProperty": "content.location"
+    },
+    {
+      "name": "solid layer",
+      "targetLayer": "overlay",
+      "targetProperty": "content.color"
+    }
+  ]
+}
