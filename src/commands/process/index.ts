@@ -1,4 +1,5 @@
 import { Command, Flags } from "@oclif/core";
+import Listr from "listr";
 import { processWorkflow } from "rejig-processing";
 import * as Jimp from "jimp";
 import * as yaml from "js-yaml";
@@ -8,6 +9,7 @@ import path from "node:path";
 import {
   Workflow,
   getDefaultWorkflow,
+  isValid,
 } from "rejig-processing/lib/models/Workflow";
 
 export default class Process extends Command {
@@ -53,27 +55,65 @@ export default class Process extends Command {
         );
       });
 
-      this.log(
-        `Attempting to process the following files:\n${filesInDir
-          .map((f) => "  · " + path.basename(f))
-          .join("\n")}`
-      );
+      const tasks = new Listr([
+        {
+          title: `Process workflows in directory '${args.workflow}'`,
+          task: async () => {
+            const subtasks: Listr.ListrTask[] = [];
 
-      await Promise.all(
-        filesInDir.map((file) =>
-          this.process(path.resolve(args.workflow, file), flags.out)
-        )
-      );
+            for await (const file of filesInDir) {
+              const processTasks = await this.process(
+                path.resolve(args.workflow, file),
+                flags.out
+              );
+              subtasks.push({
+                title: `Process '${path.basename(file)}'`,
+                task: () => new Listr(processTasks),
+              });
+            }
+
+            return new Listr(subtasks);
+          },
+        },
+        {
+          title: "Watch for changes...",
+          task: () => {
+            /* NOOP */
+          },
+          enabled: () => flags.watch,
+        },
+      ]);
+
+      try {
+        await tasks.run();
+      } catch {
+        this.exit(2);
+      }
 
       if (flags.watch) {
         await Promise.all(
-          filesInDir.map((file) =>
+          (filesInDir as string[]).map((file) =>
             this.watch(path.resolve(args.workflow, file), flags.out)
           )
         );
       }
     } else {
-      await this.process(args.workflow, flags.out);
+      const tasks = new Listr([
+        ...(await this.process(args.workflow, flags.out)),
+        {
+          title: "Watch for changes...",
+          task: () => {
+            /* NOOP */
+          },
+          enabled: () => flags.watch,
+        },
+      ]);
+
+      try {
+        await tasks.run();
+      } catch {
+        this.exit(2);
+      }
 
       if (flags.watch) {
         this.watch(args.workflow, flags.out);
@@ -82,60 +122,86 @@ export default class Process extends Command {
   }
 
   async watch(file: string, outDir?: string): Promise<void> {
-    this.log(`Watching for changes to '${path.basename(file)}'...`);
-
     try {
       const watcher = watch(file);
 
       for await (const event of watcher) {
         if (event.eventType === "change") {
-          await this.process(file, outDir);
+          try {
+            new Listr([
+              {
+                title: `Process '${path.basename(file)}'`,
+                task: async () => new Listr(await this.process(file, outDir)),
+              },
+            ]).run();
+          } catch {
+            this.exit(2);
+          }
         }
       }
-    } catch (error) {
-      this.log(
-        `✗ Something went wrong watching for changes to '${path.basename(
+    } catch {
+      throw new Error(
+        `Something went wrong watching for changes to '${path.basename(
           file
         )}' :(`
       );
-      this.error(JSON.stringify(error, null, 2));
     }
   }
 
-  async process(workflowPath: string, outDir?: string): Promise<void> {
+  async process(
+    workflowPath: string,
+    outDir?: string
+  ): Promise<Listr.ListrTask<any>[]> {
     const workflowFilename = path.basename(workflowPath);
 
-    try {
-      const workflow = this.loadFile(workflowPath);
+    return [
+      {
+        title: "Validate workflow",
+        task: async (ctx) => {
+          const workflow = this.loadFile(workflowPath);
 
-      if (!workflow) {
-        return;
-      }
+          if (!workflow) {
+            throw new Error(`Workflow '${workflowFilename}' does not exist!`);
+          }
 
-      this.log(`Processing '${workflowFilename}'...`);
+          if (!(await isValid(workflow))) {
+            throw new Error(`Workflow '${workflowFilename}' is not valid!`);
+          }
 
-      const outputFolder = outDir
-        ? path.resolve(outDir)
-        : path.dirname(workflowPath);
-      const outputFilename =
-        workflow.name ??
-        path.basename(workflowPath.replace(/.ya?ml$/i, "")) ??
-        "image";
-      const outputPath = `${outputFolder}/${outputFilename}.png`;
+          ctx.workflow = workflow;
+        },
+      },
+      {
+        title: "Process workflow",
+        task: async (ctx) => {
+          const { workflow }: { workflow: Workflow } = ctx;
+          const outputFolder = outDir
+            ? path.resolve(outDir)
+            : path.dirname(workflowPath);
 
-      const image = await processWorkflow(getDefaultWorkflow(workflow), Jimp);
-      this.writeFile(image, outputPath);
+          const outputFilename =
+            workflow.name ??
+            path.basename(workflowPath.replace(/.ya?ml$/i, "")) ??
+            "image";
 
-      this.log(
-        `Successfully processed workflow '${workflowFilename}' and saved to:\n  ✓ ${path.relative(
-          "",
-          outputPath
-        )}`
-      );
-    } catch (error) {
-      this.log(`✗ Couldn't process workflow '${workflowFilename}' :(`);
-      this.error(JSON.stringify(error, null, 2));
-    }
+          const outputPath = `${outputFolder}/${outputFilename}.png`;
+
+          const image = await processWorkflow(
+            getDefaultWorkflow(workflow),
+            Jimp
+          );
+
+          ctx.outputPath = outputPath;
+          ctx.image = image;
+        },
+      },
+      {
+        title: "Save image",
+        task: (ctx) => {
+          this.writeFile(ctx.image, ctx.outputPath);
+        },
+      },
+    ];
   }
 
   loadFile(workflowPath: string): Workflow | void {
@@ -163,7 +229,7 @@ export default class Process extends Command {
 
     const base64Matches = image.match(/^data:([+/A-Za-z-]+);base64,(.+)$/);
     if (!base64Matches) {
-      this.error("✗ Not a valid Base64 image from Rejig.Processing");
+      this.error("Not a valid Base64 image from Rejig.Processing");
     }
 
     const buffer = Buffer.from(base64Matches[2], "base64");
