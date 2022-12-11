@@ -43,7 +43,10 @@ export default class Process extends Command {
   async run(): Promise<void> {
     const { args, flags } = await this.parse(Process);
 
-    const isDirectory = fs.lstatSync(args.workflow).isDirectory();
+    const doesPathExist = fs.existsSync(args.workflow);
+    const isDirectory = doesPathExist
+      ? fs.lstatSync(args.workflow).isDirectory()
+      : false;
 
     if (isDirectory) {
       const filesInDir = fs.readdirSync(args.workflow).filter((f) => {
@@ -56,6 +59,13 @@ export default class Process extends Command {
       });
 
       const tasks = new Listr([
+        {
+          title: `Scanning '${args.workflow}'...`,
+          task: () => {
+            throw new Error("No workflows found");
+          },
+          enabled: () => filesInDir.length === 0,
+        },
         {
           title: `Process workflows in directory '${args.workflow}'`,
           task: async () => {
@@ -74,13 +84,14 @@ export default class Process extends Command {
 
             return new Listr(subtasks);
           },
+          enabled: () => filesInDir.length > 0,
         },
         {
           title: "Watch for changes...",
           task: () => {
             /* NOOP */
           },
-          enabled: () => flags.watch,
+          enabled: () => flags.watch && filesInDir.length > 0,
         },
       ]);
 
@@ -99,6 +110,13 @@ export default class Process extends Command {
       }
     } else {
       const tasks = new Listr([
+        {
+          title: `Scanning '${args.workflow}'...`,
+          task: () => {
+            throw new Error(`Path '${args.workflow}' does not exist`);
+          },
+          enabled: () => !doesPathExist,
+        },
         ...(await this.process(args.workflow, flags.out)),
         {
           title: "Watch for changes...",
