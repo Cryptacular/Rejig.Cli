@@ -10,7 +10,9 @@ describe("process", () => {
     ])
     .exit(2)
     .it("throws error with invalid workflow", (ctx) => {
-      expect(ctx.stdout).to.contain("Couldn't process workflow");
+      expect(ctx.stdout).to.contain(
+        "Workflow 'invalid-workflow.yaml' is not valid!"
+      );
     });
 
   test
@@ -21,10 +23,9 @@ describe("process", () => {
       "--out=test/data/output",
     ])
     .it("runs command with valid workflow with YAML extension", (ctx) => {
-      expect(ctx.stdout).to.contain("Successfully processed workflow");
-      expect(ctx.stdout).to.contain(
-        "test/data/output/Valid workflow - YAML.png"
-      );
+      expect(ctx.stdout).to.contain("✔ Validate workflow");
+      expect(ctx.stdout).to.contain("✔ Process workflow");
+      expect(ctx.stdout).to.contain("✔ Save image");
     });
 
   test
@@ -35,10 +36,9 @@ describe("process", () => {
       "--out=test/data/output",
     ])
     .it("runs command with valid workflow with YML extension", (ctx) => {
-      expect(ctx.stdout).to.contain("Successfully processed workflow");
-      expect(ctx.stdout).to.contain(
-        "test/data/output/Valid workflow - YML.png"
-      );
+      expect(ctx.stdout).to.contain("✔ Validate workflow");
+      expect(ctx.stdout).to.contain("✔ Process workflow");
+      expect(ctx.stdout).to.contain("✔ Save image");
     });
 
   test
@@ -49,10 +49,9 @@ describe("process", () => {
       "--out=test/data/output",
     ])
     .it("runs command with valid workflow with JSON extension", (ctx) => {
-      expect(ctx.stdout).to.contain("Successfully processed workflow");
-      expect(ctx.stdout).to.contain(
-        "test/data/output/Valid workflow - JSON.png"
-      );
+      expect(ctx.stdout).to.contain("✔ Validate workflow");
+      expect(ctx.stdout).to.contain("✔ Process workflow");
+      expect(ctx.stdout).to.contain("✔ Save image");
     });
 
   test
@@ -63,10 +62,9 @@ describe("process", () => {
       "--out=test/data/output",
     ])
     .it("runs command with valid workflow that has no name field", (ctx) => {
-      expect(ctx.stdout).to.contain("Successfully processed workflow");
-      expect(ctx.stdout).to.contain(
-        "test/data/output/valid-workflow-no-name.png"
-      );
+      expect(ctx.stdout).to.contain("✔ Validate workflow");
+      expect(ctx.stdout).to.contain("✔ Process workflow");
+      expect(ctx.stdout).to.contain("✔ Save image");
     });
 
   test
@@ -74,16 +72,7 @@ describe("process", () => {
     .command(["process", "test/data/valid", "--out=test/data/output"])
     .it("runs command with folder of valid workflows", (ctx) => {
       expect(ctx.stdout).to.contain(
-        "test/data/output/Valid workflow - YAML.png"
-      );
-      expect(ctx.stdout).to.contain(
-        "test/data/output/Valid workflow - YML.png"
-      );
-      expect(ctx.stdout).to.contain(
-        "test/data/output/Valid workflow - JSON.png"
-      );
-      expect(ctx.stdout).to.contain(
-        "test/data/output/valid-workflow-no-name.png"
+        "✔ Process workflows in directory 'test/data/valid'"
       );
     });
 
@@ -99,7 +88,10 @@ describe("process", () => {
     .it(
       "throws error when processing a workflow with a missing image",
       (ctx) => {
-        expect(ctx.stdout).to.contain("Couldn't process workflow");
+        expect(ctx.stdout).to.contain("no such file or directory");
+        expect(ctx.stdout).to.contain(
+          "'./test/data/assets/image-that-doesnt-exist.jpg'"
+        );
       }
     );
 });
