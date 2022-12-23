@@ -4874,10 +4874,10 @@ regexpp@^3.0.0, regexpp@^3.1.0:
   resolved "https://registry.npmjs.org/regexpp/-/regexpp-3.2.0.tgz"
   integrity sha512-pq2bWo9mVD43nbts2wGv17XLiNLya+GklZ8kaDLV2Z08gDCsGpnKn9BFMepvWuHCbyVvY7J5o5+BVvoQbmlJLg==
 
-rejig-processing@^1.5.3:
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/rejig-processing/-/rejig-processing-1.5.3.tgz#7fde3531aed0a06e2a7ad27c16fbd80387fa04e9"
-  integrity sha512-ibTkhh8GtYMod+gx2Eb5PpfDeGy83yMxeGY9J1GWfHkIsGudHWXakEEj89uLQ94Er/QXkJiOIaLz8MK0zWzlEw==
+rejig-processing@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/rejig-processing/-/rejig-processing-1.6.0.tgz#102666f80f2e0abd383243aec6e42ca347114783"
+  integrity sha512-qlRs3TDUoA2OgfDgEBgh877ZwWrM0YmX8mlN8kA2Svh+mMMZaUAK1DQzJQRmWNdI7T+CYYFIErrmozgwlk3Vtg==
   dependencies:
     "@types/uuid" "^8.3.4"
     jimp "^0.16.1"
