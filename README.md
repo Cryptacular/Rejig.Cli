@@ -2,7 +2,19 @@
 
 Command Line Interface for Rejig to process image editing workflows.
 
-See [Rejig.Processing](https://github.com/Cryptacular/Rejig.Processing) for more details on the workflow schema.
+See [Rejig.Processing](https://github.com/Cryptacular/Rejig.Processing) for more details on the workflow schema. You can reference the schema from JSON or YAML files like this:
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/Cryptacular/Rejig.Processing/master/json-schema/workflow.json"
+}
+```
+
+...or in YAML:
+
+```yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Cryptacular/Rejig.Processing/master/json-schema/workflow.json
+```
 
 **Table of Contents**
 
