@@ -24,10 +24,8 @@ layers:
     position:
       x: -20
       y: 20
-    origin:
-      descriptor: top right
-    alignment:
-      descriptor: top right
+    origin: top right
+    alignment: top right
   - name: Logo
     id: logo
     content:
@@ -36,10 +34,8 @@ layers:
         ./test/data/assets/the-crypt-logo.png
     position:
       y: -20
-    origin:
-      descriptor: bottom center
-    alignment:
-      descriptor: bottom center
+    origin: bottom center
+    alignment: bottom center
     scale:
       x: 0.4
       y: 0.4
@@ -49,10 +45,8 @@ layers:
       type: image
       location: >-
         ./test/data/assets/background.jpg
-    origin:
-      descriptor: center center
-    alignment:
-      descriptor: center center
+    origin: center center
+    alignment: center center
     scale:
       x: 0.09
       y: 0.09

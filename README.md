@@ -20,6 +20,7 @@ See [Rejig.Processing](https://github.com/Cryptacular/Rejig.Processing) for more
 
 <!-- toc -->
 * [Rejig CLI](#rejig-cli)
+* [yaml-language-server: $schema=https://raw.githubusercontent.com/Cryptacular/Rejig.Processing/master/json-schema/workflow.json](#yaml-language-server-schemahttpsrawgithubusercontentcomcryptacularrejigprocessingmasterjson-schemaworkflowjson)
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
