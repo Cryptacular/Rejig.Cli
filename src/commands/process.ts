@@ -1,6 +1,6 @@
 import { Command, Flags } from "@oclif/core";
 import Listr from "listr";
-import { processWorkflow } from "rejig-processing";
+import { processWorkflow, saveImage } from "rejig-processing";
 import * as yaml from "js-yaml";
 import fs from "node:fs";
 import { watch } from "node:fs/promises";
@@ -201,7 +201,9 @@ export default class Process extends Command {
             path.basename(workflowPath.replace(/.ya?ml$/i, "")) ??
             "image";
 
-          const outputPath = `${outputFolder}/${outputFilename}.png`;
+          const outputPath = `${outputFolder}/${outputFilename}.${
+            workflow.format ?? "png"
+          }`;
 
           const image = await processWorkflow(getDefaultWorkflow(workflow));
 
@@ -212,7 +214,7 @@ export default class Process extends Command {
       {
         title: "Save image",
         task: (ctx) => {
-          this.writeFile(ctx.image, ctx.outputPath);
+          saveImage(ctx.image, ctx.outputPath);
         },
       },
     ];
