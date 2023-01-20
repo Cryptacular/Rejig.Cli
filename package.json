@@ -17,9 +17,13 @@
     "/oclif.manifest.json"
   ],
   "dependencies": {
+    "@Cryptacular/rejig.processing": "^1.5.1",
     "@oclif/core": "^1.19.1",
     "@oclif/plugin-help": "^5",
-    "@oclif/plugin-plugins": "^2.1.6"
+    "@oclif/plugin-plugins": "^2.1.6",
+    "@types/js-yaml": "^4.0.5",
+    "jimp": "^0.16.2",
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
     "@oclif/test": "^2.2.8",
@@ -30,6 +34,8 @@
     "eslint": "^7.32.0",
     "eslint-config-oclif": "^4",
     "eslint-config-oclif-typescript": "^1.0.3",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-unicorn": "^40.1.0",
     "mocha": "^9",
     "oclif": "^3",
     "shx": "^0.3.3",
@@ -58,8 +64,10 @@
     "postpack": "shx rm -f oclif.manifest.json",
     "posttest": "yarn lint",
     "prepack": "yarn build && oclif manifest && oclif readme",
+    "pre:test": "rm -r test/data/output",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
-    "version": "oclif readme && git add README.md"
+    "version": "oclif readme && git add README.md",
+    "generate": "oclif readme"
   },
   "engines": {
     "node": ">=12.0.0"

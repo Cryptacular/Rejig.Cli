@@ -1,0 +1,17 @@
+size:
+  width: 400
+  height: 300
+
+layers:
+  - name: Background
+    content:
+      type: image
+      location: >-
+        ./test/data/assets/background.jpg
+    origin:
+      descriptor: center center
+    alignment:
+      descriptor: center center
+    scale:
+      x: 0.09
+      y: 0.09

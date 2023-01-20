@@ -1,0 +1,7 @@
+name: Overlay avatar
+
+size:
+  width: 400
+  height: 300
+
+layers: "Hello"
