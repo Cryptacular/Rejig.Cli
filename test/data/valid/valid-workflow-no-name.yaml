@@ -8,10 +8,8 @@ layers:
       type: image
       location: >-
         ./test/data/assets/background.jpg
-    origin:
-      descriptor: center center
-    alignment:
-      descriptor: center center
+    origin: center center
+    alignment: center center
     scale:
       x: 0.09
       y: 0.09
