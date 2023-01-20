@@ -1,6 +1,6 @@
 {
   "name": "rejig-cli",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Command line interface for Rejig",
   "author": "Nick Mertens",
   "bin": {
@@ -49,8 +49,7 @@
     "dirname": "rejig",
     "commands": "./dist/commands",
     "plugins": [
-      "@oclif/plugin-help",
-      "@oclif/plugin-plugins"
+      "@oclif/plugin-help"
     ],
     "topicSeparator": " ",
     "topics": {
