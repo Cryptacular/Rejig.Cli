@@ -1,7 +1,6 @@
 import { Command, Flags } from "@oclif/core";
 import Listr from "listr";
 import { processWorkflow } from "rejig-processing";
-import * as Jimp from "jimp";
 import * as yaml from "js-yaml";
 import fs from "node:fs";
 import { watch } from "node:fs/promises";
@@ -204,10 +203,7 @@ export default class Process extends Command {
 
           const outputPath = `${outputFolder}/${outputFilename}.png`;
 
-          const image = await processWorkflow(
-            getDefaultWorkflow(workflow),
-            Jimp
-          );
+          const image = await processWorkflow(getDefaultWorkflow(workflow));
 
           ctx.outputPath = outputPath;
           ctx.image = image;
