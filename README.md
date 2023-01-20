@@ -33,7 +33,7 @@ $ npm install -g rejig-cli
 $ rejig COMMAND
 running command...
 $ rejig (--version)
-rejig-cli/0.7.1 darwin-x64 node-v16.6.2
+rejig-cli/0.7.2 darwin-x64 node-v16.6.2
 $ rejig --help [COMMAND]
 USAGE
   $ rejig COMMAND
@@ -89,5 +89,5 @@ EXAMPLES
   $ rejig process workflow.yaml
 ```
 
-_See code: [dist/commands/process.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.7.1/dist/commands/process.ts)_
+_See code: [dist/commands/process.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.7.2/dist/commands/process.ts)_
 <!-- commandsstop -->
