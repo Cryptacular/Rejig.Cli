@@ -64,7 +64,7 @@
     "postpack": "shx rm -f oclif.manifest.json",
     "posttest": "yarn lint",
     "prepack": "yarn build && oclif manifest && oclif readme",
-    "pre:test": "rm -r test/data/output",
+    "pretest": "rm -r test/data/output || echo \"Nothing to delete\"",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md",
     "generate": "oclif readme"
