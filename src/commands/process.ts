@@ -8,7 +8,7 @@ import path from "node:path";
 import {
   Workflow,
   getDefaultWorkflow,
-  isValid,
+  validate,
 } from "rejig-processing/lib/models/Workflow";
 
 export default class Process extends Command {
@@ -42,7 +42,7 @@ export default class Process extends Command {
   async run(): Promise<void> {
     const { args, flags } = await this.parse(Process);
 
-    const doesPathExist = fs.existsSync(args.workflow);
+    const doesPathExist = fs.existsSync(path.resolve(args.workflow));
     const isDirectory = doesPathExist
       ? fs.lstatSync(args.workflow).isDirectory()
       : false;
@@ -57,47 +57,54 @@ export default class Process extends Command {
         );
       });
 
-      const tasks = new Listr([
-        {
-          title: `Scanning '${args.workflow}'...`,
-          task: () => {
-            throw new Error("No workflows found");
-          },
-          enabled: () => filesInDir.length === 0,
-        },
-        {
-          title: `Process workflows in directory '${args.workflow}'`,
-          task: async () => {
-            const subtasks: Listr.ListrTask[] = [];
+      const folderContainsWorkflows = filesInDir.length > 0;
 
-            for await (const file of filesInDir) {
-              const processTasks = await this.process(
-                path.resolve(args.workflow, file),
-                flags.out
-              );
-              subtasks.push({
-                title: `Process '${path.basename(file)}'`,
-                task: () => new Listr(processTasks),
-              });
-            }
+      const tasks = new Listr(
+        [
+          {
+            title: `Scanning '${args.workflow}'...`,
+            task: () => {
+              throw new Error("No workflows found");
+            },
+            enabled: () => !folderContainsWorkflows,
+          },
+          {
+            title: `Process workflows in directory '${args.workflow}'`,
+            task: async () => {
+              const subtasks: Listr.ListrTask[] = [];
 
-            return new Listr(subtasks);
+              for await (const file of filesInDir) {
+                const processTasks = await this.process(
+                  path.resolve(args.workflow, file),
+                  flags.out
+                );
+                subtasks.push({
+                  title: `Process '${path.basename(file)}'`,
+                  task: () => new Listr(processTasks),
+                });
+              }
+
+              return new Listr(subtasks);
+            },
+            enabled: () => folderContainsWorkflows,
           },
-          enabled: () => filesInDir.length > 0,
-        },
-        {
-          title: "Watch for changes...",
-          task: () => {
-            /* NOOP */
+          {
+            title: "Watch for changes...",
+            task: () => {
+              /* NOOP */
+            },
+            enabled: () => flags.watch && folderContainsWorkflows,
           },
-          enabled: () => flags.watch && filesInDir.length > 0,
-        },
-      ]);
+        ],
+        { exitOnError: false }
+      );
 
       try {
         await tasks.run();
       } catch {
-        this.exit(2);
+        if (!flags.watch) {
+          this.exit(2);
+        }
       }
 
       if (flags.watch) {
@@ -108,23 +115,26 @@ export default class Process extends Command {
         );
       }
     } else {
-      const tasks = new Listr([
-        {
-          title: `Scanning '${args.workflow}'...`,
-          task: () => {
-            throw new Error(`Path '${args.workflow}' does not exist`);
+      const tasks = new Listr(
+        [
+          {
+            title: `Scanning '${args.workflow}'...`,
+            task: () => {
+              throw new Error(`Path '${args.workflow}' does not exist`);
+            },
+            enabled: () => !doesPathExist,
           },
-          enabled: () => !doesPathExist,
-        },
-        ...(await this.process(args.workflow, flags.out)),
-        {
-          title: "Watch for changes...",
-          task: () => {
-            /* NOOP */
+          ...(await this.process(args.workflow, flags.out)),
+          {
+            title: "Watch for changes...",
+            task: () => {
+              /* NOOP */
+            },
+            enabled: () => flags.watch,
           },
-          enabled: () => flags.watch,
-        },
-      ]);
+        ],
+        { exitOnError: false }
+      );
 
       try {
         await tasks.run();
@@ -151,9 +161,7 @@ export default class Process extends Command {
                 task: async () => new Listr(await this.process(file, outDir)),
               },
             ]).run();
-          } catch {
-            this.exit(2);
-          }
+          } catch {}
         }
       }
     } catch {
@@ -177,12 +185,14 @@ export default class Process extends Command {
         task: async (ctx) => {
           const workflow = this.loadFile(workflowPath);
 
-          if (!workflow) {
-            throw new Error(`Workflow '${workflowFilename}' does not exist!`);
-          }
-
-          if (!(await isValid(workflow))) {
-            throw new Error(`Workflow '${workflowFilename}' is not valid!`);
+          try {
+            await validate(workflow);
+          } catch (error: any) {
+            throw new Error(
+              `Workflow '${workflowFilename}' is not valid! ${error?.errors?.join(
+                "; "
+              )}`
+            );
           }
 
           ctx.workflow = workflow;
@@ -192,9 +202,7 @@ export default class Process extends Command {
         title: "Process workflow",
         task: async (ctx) => {
           const { workflow }: { workflow: Workflow } = ctx;
-          const outputFolder = outDir
-            ? path.resolve(outDir)
-            : path.dirname(workflowPath);
+          const outputFolder = outDir ?? path.dirname(workflowPath);
 
           const outputFilename =
             workflow.name ??
@@ -207,7 +215,7 @@ export default class Process extends Command {
 
           const image = await processWorkflow(getDefaultWorkflow(workflow));
 
-          ctx.outputPath = outputPath;
+          ctx.outputPath = path.resolve(outputPath);
           ctx.image = image;
         },
       },
@@ -216,24 +224,44 @@ export default class Process extends Command {
         task: (ctx) => {
           saveImage(ctx.image, ctx.outputPath);
         },
+        enabled: (ctx) => Boolean(ctx.image),
       },
     ];
   }
 
   loadFile(workflowPath: string): Workflow | void {
+    const workflowFilename = path.basename(workflowPath);
     const lowercaseFile = workflowPath.toLocaleLowerCase();
 
-    if (lowercaseFile.endsWith(".yml") || lowercaseFile.endsWith(".yaml")) {
-      return yaml.load(
-        fs.readFileSync(path.resolve(workflowPath), "utf-8")
-      ) as Workflow;
+    const isYaml =
+      lowercaseFile.endsWith(".yml") || lowercaseFile.endsWith(".yaml");
+    const isJson = lowercaseFile.endsWith(".json");
+
+    if (!isYaml && !isJson) {
+      throw new Error(`Workflow '${workflowFilename}' is not YAML or JSON!`);
     }
 
-    if (lowercaseFile.endsWith(".json")) {
-      return JSON.parse(
-        // eslint-disable-next-line unicorn/prefer-json-parse-buffer
-        fs.readFileSync(path.resolve(workflowPath), "utf-8")
-      ) as Workflow;
+    const doesFileExist = fs.existsSync(path.resolve(workflowPath));
+
+    if (!doesFileExist) {
+      throw new Error(`Workflow '${workflowFilename}' does not exist!`);
+    }
+
+    if (isYaml) {
+      return (
+        (yaml.load(
+          fs.readFileSync(path.resolve(workflowPath), "utf-8")
+        ) as Workflow) || {}
+      );
+    }
+
+    if (isJson) {
+      return (
+        (JSON.parse(
+          // eslint-disable-next-line unicorn/prefer-json-parse-buffer
+          fs.readFileSync(path.resolve(workflowPath), "utf-8")
+        ) as Workflow) || {}
+      );
     }
   }
 
