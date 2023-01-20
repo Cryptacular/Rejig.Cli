@@ -69,6 +69,26 @@ describe("process", () => {
 
   test
     .stdout()
+    .command(["process", "test/data/does-not-exist"])
+    .exit(2)
+    .it("throws error if path does not exist", (ctx) => {
+      expect(ctx.stdout).to.contain("✖ Scanning 'test/data/does-not-exist'...");
+      expect(ctx.stdout).to.contain(
+        "Path 'test/data/does-not-exist' does not exist"
+      );
+    });
+
+  test
+    .stdout()
+    .command(["process", "test/data/empty"])
+    .exit(2)
+    .it("throws error if directory contains no workflows", (ctx) => {
+      expect(ctx.stdout).to.contain("✖ Scanning 'test/data/empty'...");
+      expect(ctx.stdout).to.contain("No workflows found");
+    });
+
+  test
+    .stdout()
     .command(["process", "test/data/valid", "--out=test/data/output"])
     .it("runs command with folder of valid workflows", (ctx) => {
       expect(ctx.stdout).to.contain(
