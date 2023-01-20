@@ -89,7 +89,7 @@ export default class Process extends Command {
             enabled: () => folderContainsWorkflows,
           },
           {
-            title: "Watch for changes...",
+            title: "Watch for changes... (Press Ctrl+C to cancel)",
             task: () => {
               /* NOOP */
             },
@@ -126,7 +126,7 @@ export default class Process extends Command {
           },
           ...(await this.process(args.workflow, flags.out)),
           {
-            title: "Watch for changes...",
+            title: "Watch for changes... (Press Ctrl+C to cancel)",
             task: () => {
               /* NOOP */
             },
