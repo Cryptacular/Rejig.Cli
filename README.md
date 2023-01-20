@@ -314,5 +314,5 @@ EXAMPLES
   $ rejig process workflow.yaml
 ```
 
-_See code: [dist/commands/process/index.ts](https://github.com/Cryptacular/rejig-cli/blob/v0.1.0/dist/commands/process/index.ts)_
+_See code: [dist/commands/process/index.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.1.0/dist/commands/process/index.ts)_
 <!-- commandsstop -->

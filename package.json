@@ -6,10 +6,10 @@
   "bin": {
     "rejig": "./bin/run"
   },
-  "homepage": "https://github.com/Cryptacular/rejig-cli",
+  "homepage": "https://github.com/Cryptacular/Rejig.Cli",
   "license": "MIT",
   "main": "dist/index.js",
-  "repository": "Cryptacular/rejig-cli",
+  "repository": "Cryptacular/Rejig.Cli",
   "files": [
     "/bin",
     "/dist",
@@ -72,7 +72,7 @@
   "engines": {
     "node": ">=12.0.0"
   },
-  "bugs": "https://github.com/Cryptacular/rejig-cli/issues",
+  "bugs": "https://github.com/Cryptacular/Rejig.Cli/issues",
   "keywords": [
     "oclif"
   ],
