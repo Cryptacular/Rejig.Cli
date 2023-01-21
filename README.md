@@ -45,7 +45,13 @@ USAGE
 
 <!-- commands -->
 * [`rejig help [COMMAND]`](#rejig-help-command)
+* [`rejig list`](#rejig-list)
+* [`rejig login`](#rejig-login)
+* [`rejig logout`](#rejig-logout)
 * [`rejig process WORKFLOW`](#rejig-process-workflow)
+* [`rejig pull WORKFLOW`](#rejig-pull-workflow)
+* [`rejig push WORKFLOW NAME`](#rejig-push-workflow-name)
+* [`rejig tags WORKFLOW`](#rejig-tags-workflow)
 
 ## `rejig help [COMMAND]`
 
@@ -66,6 +72,51 @@ DESCRIPTION
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.18/src/commands/help.ts)_
+
+## `rejig list`
+
+List workflows you've published to Rejig
+
+```
+USAGE
+  $ rejig list
+
+DESCRIPTION
+  List workflows you've published to Rejig
+
+EXAMPLES
+  $ rejig list
+```
+
+_See code: [dist/commands/list.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.7.3/dist/commands/list.ts)_
+
+## `rejig login`
+
+Log in to your Rejig account
+
+```
+USAGE
+  $ rejig login
+
+DESCRIPTION
+  Log in to your Rejig account
+```
+
+_See code: [dist/commands/login.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.7.3/dist/commands/login.ts)_
+
+## `rejig logout`
+
+Log out of your Rejig account
+
+```
+USAGE
+  $ rejig logout
+
+DESCRIPTION
+  Log out of your Rejig account
+```
+
+_See code: [dist/commands/logout.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.7.3/dist/commands/logout.ts)_
 
 ## `rejig process WORKFLOW`
 
@@ -90,4 +141,72 @@ EXAMPLES
 ```
 
 _See code: [dist/commands/process.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.7.3/dist/commands/process.ts)_
+
+## `rejig pull WORKFLOW`
+
+Pull down a workflow manifest to your machine.
+
+```
+USAGE
+  $ rejig pull [WORKFLOW]
+
+ARGUMENTS
+  WORKFLOW  Name of the workflow to pull down, e.g. 'workflow-name'. Can optionally also specify a tag, eg.
+            'workflow-name:tag'. If not specified, the tag defaults to 'latest'
+
+DESCRIPTION
+  Pull down a workflow manifest to your machine.
+
+EXAMPLES
+  $ rejig pull my-custom-workflow
+
+  $ rejig pull my-custom-workflow:1.0.0
+```
+
+_See code: [dist/commands/pull.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.7.3/dist/commands/pull.ts)_
+
+## `rejig push WORKFLOW NAME`
+
+Push a workflow to Rejig so that it can be published and used by others. Format is '<workflow-name>:<tag>', e.g. 'rounded-corners:v1.0.0'
+
+```
+USAGE
+  $ rejig push [WORKFLOW] [NAME]
+
+ARGUMENTS
+  WORKFLOW  Workflow file to push
+  NAME      Name of the workflow. Should be in kebab-case (all lowercase), e.g. 'workflow-name'. Can optionally also
+            specify a tag, eg. 'workflow-name:tag'. If not specified, the tag defaults to 'latest'
+
+DESCRIPTION
+  Push a workflow to Rejig so that it can be published and used by others. Format is '<workflow-name>:<tag>', e.g.
+  'rounded-corners:v1.0.0'
+
+EXAMPLES
+  $ rejig push workflow.yaml my-custom-workflow
+
+  $ rejig push workflow.yaml my-custom-workflow:1.0.0
+```
+
+_See code: [dist/commands/push.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.7.3/dist/commands/push.ts)_
+
+## `rejig tags WORKFLOW`
+
+Lists the tags available for a particular workflow published to Rejig
+
+```
+USAGE
+  $ rejig tags [WORKFLOW]
+
+ARGUMENTS
+  WORKFLOW  The workflow to inspect tags for
+
+DESCRIPTION
+  Lists the tags available for a particular workflow published to Rejig
+
+EXAMPLES
+  $ rejig tags some-workflow
+```
+
+_See code: [dist/commands/tags.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.7.3/dist/commands/tags.ts)_
 <!-- commandsstop -->

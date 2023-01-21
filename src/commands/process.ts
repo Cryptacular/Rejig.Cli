@@ -1,7 +1,6 @@
-import { Command, Flags } from "@oclif/core";
+import { Flags } from "@oclif/core";
 import Listr from "listr";
 import { processWorkflow, saveImage } from "rejig-processing";
-import * as yaml from "js-yaml";
 import fs from "node:fs";
 import { watch } from "node:fs/promises";
 import path from "node:path";
@@ -10,8 +9,9 @@ import {
   getDefaultWorkflow,
   validate,
 } from "rejig-processing/lib/models/Workflow";
+import { BaseCommand } from "../base-command";
 
-export default class Process extends Command {
+export default class Process extends BaseCommand {
   static description =
     "Process one or more workflows in YAML or JSON format, then output an image.";
 
@@ -183,7 +183,7 @@ export default class Process extends Command {
       {
         title: "Validate workflow",
         task: async (ctx) => {
-          const workflow = this.loadFile(workflowPath);
+          const workflow = this.loadWorkflowFile(workflowPath);
 
           try {
             await validate(workflow);
@@ -227,42 +227,6 @@ export default class Process extends Command {
         enabled: (ctx) => Boolean(ctx.image),
       },
     ];
-  }
-
-  loadFile(workflowPath: string): Workflow | void {
-    const workflowFilename = path.basename(workflowPath);
-    const lowercaseFile = workflowPath.toLocaleLowerCase();
-
-    const isYaml =
-      lowercaseFile.endsWith(".yml") || lowercaseFile.endsWith(".yaml");
-    const isJson = lowercaseFile.endsWith(".json");
-
-    if (!isYaml && !isJson) {
-      throw new Error(`Workflow '${workflowFilename}' is not YAML or JSON!`);
-    }
-
-    const doesFileExist = fs.existsSync(path.resolve(workflowPath));
-
-    if (!doesFileExist) {
-      throw new Error(`Workflow '${workflowFilename}' does not exist!`);
-    }
-
-    if (isYaml) {
-      return (
-        (yaml.load(
-          fs.readFileSync(path.resolve(workflowPath), "utf-8")
-        ) as Workflow) || {}
-      );
-    }
-
-    if (isJson) {
-      return (
-        (JSON.parse(
-          // eslint-disable-next-line unicorn/prefer-json-parse-buffer
-          fs.readFileSync(path.resolve(workflowPath), "utf-8")
-        ) as Workflow) || {}
-      );
-    }
   }
 
   writeFile(image: string, outputPath: string): void {
