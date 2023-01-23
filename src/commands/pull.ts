@@ -29,14 +29,17 @@ export default class Pull extends BaseCommand {
         title: "Fetch workflow",
         task: async (ctx) => {
           const response = await fetch(
-            `${REJIG_BASE_URL}/api/workflow/${args.workflow}`
+            `${REJIG_BASE_URL}/api/workflow/${encodeURIComponent(
+              args.workflow
+            )}`
           );
 
           if (!response.ok) {
+            const body = JSON.parse(response.body.read() as string);
             throw new Error(
-              `Something went wrong. Status: '${response.status}'. '${
-                JSON.parse(response.body.read() as string).message
-              }'`
+              `Something went wrong. Status: '${response.status}'. ${
+                body?.message || ""
+              }`
             );
           }
 

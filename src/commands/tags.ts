@@ -18,9 +18,8 @@ export default class Tags extends BaseCommand {
 
   async run(): Promise<void> {
     const { args } = await this.parse(Tags);
-
     const response = await fetch(
-      `${REJIG_BASE_URL}/api/workflow/${args.workflow}/tags`
+      `${REJIG_BASE_URL}/api/user/${args.workflow}/tags`
     );
 
     if (response.ok) {
@@ -29,9 +28,9 @@ export default class Tags extends BaseCommand {
     }
 
     this.error(
-      `Something went wrong. Status: '${response.status}'. '${
-        JSON.parse(response.body.read() as string).message
-      }'`
+      `Something went wrong. Status: '${response.status}'. ${
+        JSON.parse(response.body.read() as string)?.message || ""
+      }`
     );
   }
 }
