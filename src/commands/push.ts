@@ -43,7 +43,12 @@ export default class Push extends BaseCommand {
 
       const response = await fetch(`${REJIG_BASE_URL}/api/workflow`, {
         method: "POST",
-        body: JSON.stringify({ name, jwt: session, workflow: manifest }),
+        body: JSON.stringify({
+          name,
+          refreshToken: session?.refresh_token,
+          workflow: manifest,
+        }),
+        headers: { Authorization: `Bearer ${session?.access_token}` },
       });
 
       if (response.ok) {
