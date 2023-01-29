@@ -24,14 +24,14 @@ export default class List extends BaseCommand {
     );
 
     if (response.ok) {
-      this.log(JSON.parse(response.body.read() as string).join("\n"));
+      this.log(JSON.parse(await response.text()).join("\n"));
       return;
     }
 
+    const body = await response.json();
+
     this.error(
-      `Something went wrong. Status: '${response.status}'. '${
-        JSON.parse(response.body.read() as string).message
-      }'`
+      `Something went wrong. Status: '${response.status}'. '${body?.message}'`
     );
   }
 }

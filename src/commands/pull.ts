@@ -35,7 +35,7 @@ export default class Pull extends BaseCommand {
           );
 
           if (!response.ok) {
-            const body = JSON.parse(response.body.read() as string);
+            const body = await response.json();
             throw new Error(
               `Something went wrong. Status: '${response.status}'. ${
                 body?.message || ""
@@ -48,7 +48,7 @@ export default class Pull extends BaseCommand {
       },
       {
         title: `Save to disk`,
-        task: (ctx) => {
+        task: async (ctx) => {
           const [workflowName, workflowTag] = hasWorkflowNameGotTag(
             args.workflow
           )
@@ -58,7 +58,7 @@ export default class Pull extends BaseCommand {
           const baseFolder = `${this.config.cacheDir}/workflows/${workflowName}`;
           const filePath = `${baseFolder}/${workflowTag}.json`;
 
-          const manifest = ctx.response.body.read();
+          const manifest = await ctx.response.text();
 
           fs.mkdirSync(baseFolder, { recursive: true });
           fs.writeFileSync(filePath, manifest, "utf-8");

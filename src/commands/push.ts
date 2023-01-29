@@ -51,15 +51,15 @@ export default class Push extends BaseCommand {
         headers: { Authorization: `Bearer ${session?.access_token}` },
       });
 
+      const body = await response.json();
+
       if (response.ok) {
-        this.log(JSON.parse(response.body.read() as string).message);
+        this.log(body.message);
         return;
       }
 
       this.error(
-        `Something went wrong. Status: '${response.status}'. '${
-          JSON.parse(response.body.read() as string).message
-        }'`
+        `Something went wrong. Status: '${response.status}'. '${body.message}'`
       );
     };
 

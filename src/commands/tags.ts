@@ -22,14 +22,16 @@ export default class Tags extends BaseCommand {
       `${REJIG_BASE_URL}/api/user/${args.workflow}/tags`
     );
 
+    const body = await response.json();
+
     if (response.ok) {
-      this.log(JSON.parse(response.body.read() as string).join("\n"));
+      this.log(body.join("\n"));
       return;
     }
 
     this.error(
       `Something went wrong. Status: '${response.status}'. ${
-        JSON.parse(response.body.read() as string)?.message || ""
+        body?.message || ""
       }`
     );
   }
