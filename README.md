@@ -33,7 +33,7 @@ $ npm install -g rejig-cli
 $ rejig COMMAND
 running command...
 $ rejig (--version)
-rejig-cli/0.9.0 darwin-x64 node-v16.6.2
+rejig-cli/0.10.0 darwin-x64 node-v16.6.2
 $ rejig --help [COMMAND]
 USAGE
   $ rejig COMMAND
@@ -88,7 +88,7 @@ EXAMPLES
   $ rejig list
 ```
 
-_See code: [dist/commands/list.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.9.0/dist/commands/list.ts)_
+_See code: [dist/commands/list.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.10.0/dist/commands/list.ts)_
 
 ## `rejig login`
 
@@ -102,7 +102,7 @@ DESCRIPTION
   Log in to your Rejig account
 ```
 
-_See code: [dist/commands/login.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.9.0/dist/commands/login.ts)_
+_See code: [dist/commands/login.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.10.0/dist/commands/login.ts)_
 
 ## `rejig logout`
 
@@ -116,7 +116,7 @@ DESCRIPTION
   Log out of your Rejig account
 ```
 
-_See code: [dist/commands/logout.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.9.0/dist/commands/logout.ts)_
+_See code: [dist/commands/logout.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.10.0/dist/commands/logout.ts)_
 
 ## `rejig process WORKFLOW`
 
@@ -140,7 +140,7 @@ EXAMPLES
   $ rejig process workflow.yaml
 ```
 
-_See code: [dist/commands/process.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.9.0/dist/commands/process.ts)_
+_See code: [dist/commands/process.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.10.0/dist/commands/process.ts)_
 
 ## `rejig pull WORKFLOW`
 
@@ -163,7 +163,7 @@ EXAMPLES
   $ rejig pull my-custom-workflow:1.0.0
 ```
 
-_See code: [dist/commands/pull.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.9.0/dist/commands/pull.ts)_
+_See code: [dist/commands/pull.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.10.0/dist/commands/pull.ts)_
 
 ## `rejig push WORKFLOW NAME`
 
@@ -188,7 +188,7 @@ EXAMPLES
   $ rejig push workflow.yaml my-custom-workflow:1.0.0
 ```
 
-_See code: [dist/commands/push.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.9.0/dist/commands/push.ts)_
+_See code: [dist/commands/push.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.10.0/dist/commands/push.ts)_
 
 ## `rejig tags WORKFLOW`
 
@@ -208,5 +208,5 @@ EXAMPLES
   $ rejig tags some-workflow
 ```
 
-_See code: [dist/commands/tags.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.9.0/dist/commands/tags.ts)_
+_See code: [dist/commands/tags.ts](https://github.com/Cryptacular/Rejig.Cli/blob/v0.10.0/dist/commands/tags.ts)_
 <!-- commandsstop -->
