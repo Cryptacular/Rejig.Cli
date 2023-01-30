@@ -213,7 +213,9 @@ export default class Process extends BaseCommand {
             workflow.format ?? "png"
           }`;
 
-          const image = await processWorkflow(getDefaultWorkflow(workflow));
+          const image = await processWorkflow(getDefaultWorkflow(workflow), {
+            cacheDir: this.config.cacheDir,
+          });
 
           ctx.outputPath = path.resolve(outputPath);
           ctx.image = image;

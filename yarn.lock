@@ -1106,7 +1106,7 @@
   resolved "https://registry.npmjs.org/@types/mocha/-/mocha-9.0.0.tgz"
   integrity "sha1-MgW80Vram8aBrCC+9k6ebfiP0pc= sha512-scN0hAWyLVAvLR9AyW7HoFF5sJZglyBsbPuHO4fv7JRvfmPBMfp1ozWqOf/e4wwPNxezBZXRfWzMb6iFLgEVRA=="
 
-"@types/node-fetch@2":
+"@types/node-fetch@2", "@types/node-fetch@^2.6.2":
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.6.2.tgz#d1a9c5fd049d9415dce61571557104dec3ec81da"
   integrity sha512-DHqhlq5jeESLy19TYhLakJ07kNumXWjcDdxXsLUMJZ6ue8VZJj4kLPQVE/2mdHh3xZziNF1xppu5lwmS53HR+A==
@@ -4276,7 +4276,7 @@ nock@^13.0.0:
     lodash.set "^4.3.2"
     propagate "^2.0.0"
 
-node-fetch@2:
+node-fetch@2, node-fetch@^2.6.8:
   version "2.6.8"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.8.tgz#a68d30b162bc1d8fd71a367e81b997e1f4d4937e"
   integrity sha512-RZ6dBYuj8dRSfxpUSu+NsdF1dpPpluJxwOp+6IoDp/sH2QNDSvurYsAa+F1WxY2RjA1iP93xhcsUoYbF2XBqVg==
@@ -5057,15 +5057,17 @@ regexpp@^3.0.0, regexpp@^3.1.0:
   resolved "https://registry.npmjs.org/regexpp/-/regexpp-3.2.0.tgz"
   integrity "sha1-BCWido2PI7rXDKS5BGH6LxIT4bI= sha512-pq2bWo9mVD43nbts2wGv17XLiNLya+GklZ8kaDLV2Z08gDCsGpnKn9BFMepvWuHCbyVvY7J5o5+BVvoQbmlJLg=="
 
-rejig-processing@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.npmjs.org/rejig-processing/-/rejig-processing-2.0.1.tgz"
-  integrity "sha1-9dINJXcLn+uIfotGhZEVvQSb8Gw= sha512-dGdjiVwKQ0Fa1RfyoNuncETdzq2NbQevLTC6HaZrCo4lhsy8Fmv8m5rqOpkN1Rv30g6l8ax54SxdGvYmDvvVmw=="
+rejig-processing@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/rejig-processing/-/rejig-processing-2.3.0.tgz#464bf151d5ea698ac207e120e7449f71b0ec6c47"
+  integrity sha512-QBanQyWY6+9LBDAVLxI13RLtarB3dwoCOmPxZFDxYjywGf5r2XfeApbS0wUn7rNgp4llueuid4kf1lx/2qqMFg==
   dependencies:
+    "@types/node-fetch" "^2.6.2"
     "@types/uuid" "^8.3.4"
     jimp "^0.16.1"
+    node-fetch "^2.6.8"
     uuid "^8.3.2"
-    yup "^1.0.0-beta.7"
+    yup "^1.0.0-beta.8"
 
 remove-trailing-separator@^1.0.1:
   version "1.1.0"
@@ -6326,10 +6328,10 @@ yosay@^2.0.2:
     taketalk "^1.0.0"
     wrap-ansi "^2.0.0"
 
-yup@^1.0.0-beta.7:
+yup@^1.0.0-beta.8:
   version "1.0.0-beta.8"
-  resolved "https://registry.npmjs.org/yup/-/yup-1.0.0-beta.8.tgz"
-  integrity "sha1-RsKAfXyEEZ46Ppi1CKIrfALAQ04= sha512-vczv/4dfMGp47A4cS633mrp6bLIIIFL113bSmnAWajKLXzRlEENNaTNRbQyr6iwlCincjvFAeYXwRsURq7vp+A=="
+  resolved "https://registry.yarnpkg.com/yup/-/yup-1.0.0-beta.8.tgz#46c2807d7c84119e3a3e98b508a22b7c02c0434e"
+  integrity sha512-vczv/4dfMGp47A4cS633mrp6bLIIIFL113bSmnAWajKLXzRlEENNaTNRbQyr6iwlCincjvFAeYXwRsURq7vp+A==
   dependencies:
     property-expr "^2.0.5"
     tiny-case "^1.0.3"
