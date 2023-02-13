@@ -7,4 +7,3 @@
 node_modules
 oclif.manifest.json
 test/data/output
-*.png
