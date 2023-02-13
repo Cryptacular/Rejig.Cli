@@ -101,8 +101,9 @@ export default class Process extends BaseCommand {
 
       try {
         await tasks.run();
-      } catch {
+      } catch (error) {
         if (!flags.watch) {
+          this.logToStderr(`Something went wrong: ${JSON.stringify(error)}`);
           this.exit(2);
         }
       }
@@ -138,7 +139,8 @@ export default class Process extends BaseCommand {
 
       try {
         await tasks.run();
-      } catch {
+      } catch (error) {
+        this.logToStderr(`Something went wrong: ${JSON.stringify(error)}`);
         this.exit(2);
       }
 
