@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable unicorn/prefer-json-parse-buffer */
 import fs from "node:fs";
 import path from "node:path";
@@ -18,11 +19,20 @@ export abstract class BaseCommand extends Command {
 
     if (cache.session) {
       const client = getClient();
+
       try {
-        const response = await client.auth.setSession(cache.session);
+        const { access_token, refresh_token } = cache.session;
+
+        const response = await client.auth.setSession({
+          access_token,
+          refresh_token,
+        });
         if (response.data.session) {
-          this.storeInCache({ session: response.data.session });
-          return response.data.session;
+          const { session } = response.data;
+          const { access_token, refresh_token } = session;
+
+          this.storeInCache({ session: { access_token, refresh_token } });
+          return session;
         }
       } catch {
         return null;
@@ -54,8 +64,12 @@ export abstract class BaseCommand extends Command {
       this.error("Could not log in...");
     }
 
-    this.storeInCache({ session: response.data.session });
-    return response.data.session;
+    const { session } = response.data;
+    const { access_token, refresh_token } = session;
+
+    this.storeInCache({ session: { access_token, refresh_token } });
+
+    return session;
   }
 
   protected async logOut(): Promise<void> {
@@ -140,7 +154,7 @@ const cacheFileName = "cache.json";
 
 interface Cache {
   email?: string;
-  session?: Session | null;
+  session?: { access_token: string; refresh_token: string } | null;
 }
 
 const getClient = () => {
