@@ -14,7 +14,7 @@ export default class Tags extends BaseCommand {
     },
   ];
 
-  static examples = ["$ rejig tags some-workflow"];
+  static examples = ["$ rejig tags some-user/some-workflow"];
 
   async run(): Promise<void> {
     const { args } = await this.parse(Tags);
@@ -22,17 +22,36 @@ export default class Tags extends BaseCommand {
       `${REJIG_BASE_URL}/api/user/${args.workflow}/tags`
     );
 
-    const body = await response.json();
+    const body: Tag[] | ErrorResponse = await response.json();
 
     if (response.ok) {
-      this.log(body.join("\n"));
+      this.log((body as Tag[]).map((tag) => `${tag.name}`).join("\n"));
       return;
     }
 
     this.error(
       `Something went wrong. Status: '${response.status}'. ${
-        body?.message || ""
+        (body as ErrorResponse).message || ""
       }`
     );
   }
+}
+
+interface Tag {
+  id: string;
+  name: string;
+  workflowId: string;
+  created: string;
+  modified: string;
+  Workflow: {
+    id: string;
+    userId: string;
+    name: string;
+    created: string;
+    modified: string;
+  };
+}
+
+interface ErrorResponse {
+  message: string;
 }
