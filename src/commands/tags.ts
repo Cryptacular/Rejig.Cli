@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 import { BaseCommand } from "../base-command";
-import { REJIG_BASE_URL } from "../constants/urls";
+import { REJIG_BASE_URL } from "../constants";
 
 export default class Tags extends BaseCommand {
   static description =

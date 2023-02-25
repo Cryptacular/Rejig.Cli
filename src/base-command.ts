@@ -6,6 +6,7 @@ import * as yaml from "js-yaml";
 import { CliUx, Command } from "@oclif/core";
 import { createClient, Session } from "@supabase/supabase-js";
 import { Workflow } from "rejig-processing/lib/models/Workflow";
+import { SUPABASE_ANON_KEY, SUPABASE_BASE_URL } from "./constants";
 
 export abstract class BaseCommand extends Command {
   static globalFlags = {};
@@ -158,8 +159,5 @@ interface Cache {
 }
 
 const getClient = () => {
-  return createClient(
-    "https://rtvflcioatnrdqlvxonx.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0dmZsY2lvYXRucmRxbHZ4b254Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzA4OTk1MjksImV4cCI6MTk4NjQ3NTUyOX0.zJaRjmwgtuO-QbdkpBs_9M9LN9rYPVoBmS74xpArVtw"
-  );
+  return createClient(SUPABASE_BASE_URL, SUPABASE_ANON_KEY);
 };

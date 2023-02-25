@@ -1,8 +1,8 @@
 // eslint-disable-next-line unicorn/prefer-module
-var { REJIG_BASE_URL } = require("../dist/constants/urls.js");
+var { REJIG_BASE_URL } = require("../dist/constants/index.js");
 
 if (REJIG_BASE_URL.includes("localhost")) {
   throw new Error(
-    "Change configuration back to production mode before publishing! (constants/urls.ts)"
+    "Change configuration back to production mode before publishing! (constants/index.ts)"
   );
 }

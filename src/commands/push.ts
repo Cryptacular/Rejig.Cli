@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 import path from "node:path";
 import { validate, Workflow } from "rejig-processing/lib/models/Workflow";
 import { BaseCommand } from "../base-command";
-import { REJIG_BASE_URL } from "../constants/urls";
+import { REJIG_BASE_URL } from "../constants";
 
 export default class Push extends BaseCommand {
   static description =

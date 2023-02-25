@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import fetch from "node-fetch";
 import { BaseCommand } from "../base-command";
-import { REJIG_BASE_URL } from "../constants/urls";
+import { REJIG_BASE_URL } from "../constants";
 import Listr from "listr";
 
 export default class Pull extends BaseCommand {
