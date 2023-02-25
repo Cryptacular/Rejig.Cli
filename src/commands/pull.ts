@@ -29,9 +29,7 @@ export default class Pull extends BaseCommand {
         title: "Fetch workflow",
         task: async (ctx) => {
           const response = await fetch(
-            `${REJIG_BASE_URL}/api/workflow/${encodeURIComponent(
-              args.workflow
-            )}`
+            `${REJIG_BASE_URL}/api/user/${args.workflow}/manifest`
           );
 
           if (!response.ok) {
