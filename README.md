@@ -20,6 +20,7 @@ See [Rejig.Processing](https://github.com/Cryptacular/Rejig.Processing) for more
 
 <!-- toc -->
 * [Rejig CLI](#rejig-cli)
+* [yaml-language-server: $schema=https://raw.githubusercontent.com/Cryptacular/Rejig.Processing/master/json-schema/workflow.json](#yaml-language-server-schemahttpsrawgithubusercontentcomcryptacularrejigprocessingmasterjson-schemaworkflowjson)
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
@@ -32,7 +33,7 @@ $ npm install -g rejig-cli
 $ rejig COMMAND
 running command...
 $ rejig (--version)
-rejig-cli/0.10.1 darwin-x64 node-v16.6.2
+rejig-cli/0.10.2 darwin-x64 node-v19.6.1
 $ rejig --help [COMMAND]
 USAGE
   $ rejig COMMAND
