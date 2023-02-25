@@ -33,7 +33,7 @@ $ npm install -g rejig-cli
 $ rejig COMMAND
 running command...
 $ rejig (--version)
-rejig-cli/0.11.1 darwin-x64 node-v19.6.1
+rejig-cli/0.11.2 darwin-x64 node-v19.6.1
 $ rejig --help [COMMAND]
 USAGE
   $ rejig COMMAND
