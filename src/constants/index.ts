@@ -1,4 +1,4 @@
-const isProduction = false;
+const isProduction = true;
 
 export const REJIG_BASE_URL = isProduction
   ? "https://www.rejig.app"
